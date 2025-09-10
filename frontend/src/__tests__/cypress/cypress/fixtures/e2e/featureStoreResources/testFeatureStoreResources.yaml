@@ -2,3 +2,18 @@
 projectName: "test-fs-ui-proj"
 feastCreditScoringProject: "credit_scoring_local"
 feastDriverRankingProject: "driver_ranking"
+expectedFeaturesColumns:
+  - "Feature"
+  - "Project"
+  - "Value Type"
+  - "Feature View"
+  - "Owner"
+expectedFeatureViewsColumns:
+  - "Feature View"
+  - "Project"
+  - "Tags"
+  - "Features"
+  - "Created"
+  - "Updated"
+  - "Owner"
+  - "Store type"

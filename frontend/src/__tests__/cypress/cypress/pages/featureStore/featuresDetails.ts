@@ -74,6 +74,10 @@ class FeatureDetails extends Contextual<HTMLElement> {
     return this;
   }
 
+  shouldHaveFeatureTagsText(tag: string) {
+    return cy.findByTestId('feature-store-tags-group').findByText(tag).should('exist');
+  }
+
   shouldHaveFeatureInteractiveExample() {
     this.findFeatureInteractiveExample().should('be.visible');
     return this;

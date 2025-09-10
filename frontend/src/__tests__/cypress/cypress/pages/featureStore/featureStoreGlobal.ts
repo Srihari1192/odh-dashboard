@@ -2,7 +2,8 @@ import { appChrome } from '#~/__tests__/cypress/cypress/pages/appChrome';
 import { Contextual } from '#~/__tests__/cypress/cypress/pages/components/Contextual';
 import type { UserAuthConfig } from '#~/__tests__/cypress/cypress/types';
 
-const FEAST_FEATURE_FLAGS = 'devFeatureFlags=Feature+store+plugin%3Dtrue';
+const FEAST_FEATURE_FLAGS =
+  'devFeatureFlags=disableFeatureStore%3Dfalse%2CFeature+store+plugin%3Dtrue';
 
 class FeatureStoreGlobal {
   visit(project?: string) {
@@ -200,6 +201,26 @@ class FeatureStoreProjectSelector extends Contextual<HTMLElement> {
   }
 }
 
+class FeatureStoreInteractiveHover extends Contextual<HTMLElement> {
+  shouldHaveInteractiveHoverTooltip(interactiveID: string) {
+    cy.get(`#${interactiveID}-button`).trigger('mouseenter');
+    cy.get(`#${interactiveID}-button`).trigger('focus');
+    // Assert initial tooltip appears with correct text
+    return cy
+      .get('[role="tooltip"]', { timeout: 3000 })
+      .should('be.visible')
+      .should('contain.text', 'Copy to clipboard');
+  }
+
+  shouldHaveInteractiveClickSuccessTooltip(interactiveID: string) {
+    cy.get(`#${interactiveID}-button`).click();
+    return cy
+      .get('[role="tooltip"]', { timeout: 5000 })
+      .should('be.visible')
+      .should('contain.text', 'Successfully copied to clipboard!');
+  }
+}
+export const featureStoreInteractiveHover = new FeatureStoreInteractiveHover();
 export const featureStoreGlobal = new FeatureStoreGlobal();
 
 export const featureStoreProjectSelector = new FeatureStoreProjectSelector(() =>

@@ -53,6 +53,10 @@ class FeatureViewTableRow extends TableRow {
     return this.find().find('[data-label="Feature View"]');
   }
 
+  findFeatureViewDescription() {
+    return this.find().findByTestId('table-row-title-description');
+  }
+
   findFeatureViewLink() {
     return this.findFeatureViewName().find('a');
   }
@@ -73,6 +77,10 @@ class FeatureViewTableRow extends TableRow {
     return this.find().find('[data-label="Updated"]');
   }
 
+  findProject() {
+    return this.find().find('[data-label="Project"]');
+  }
+
   findOwner() {
     return this.find().find('[data-label="Owner"]');
   }
@@ -81,8 +89,45 @@ class FeatureViewTableRow extends TableRow {
     return this.find().find('[data-label="Store type"]');
   }
 
+  findStoreTypeLabel() {
+    return this.find()
+      .findByTestId('table-row-title') // finds the row
+      .parents('td') // go up to the <td>
+      .find('.pf-v6-c-label__text');
+  }
+
+  shouldHaveCreatedDate(date: string) {
+    this.findCreatedDate().should('contain.text', date);
+    return this;
+  }
+
+  shouldHaveUpdatedDate(date: string) {
+    this.findUpdatedDate().should('contain.text', date);
+    return this;
+  }
+
+  shouldHaveStoreTypeLabel(label: string) {
+    this.findStoreTypeLabel().should('contain.text', label);
+    return this;
+  }
+
+  shouldHaveFeatureViewDescription(description: string) {
+    this.findFeatureViewDescription().should('contain.text', description);
+    return this;
+  }
+
   shouldHaveFeatureViewName(name: string) {
     this.findFeatureViewName().should('contain.text', name);
+    return this;
+  }
+
+  shouldHaveProject(project: string) {
+    this.findProject().should('contain.text', project);
+    return this;
+  }
+
+  shouldHaveStoreType(storeType: string) {
+    this.findStoreType().should('contain.text', storeType);
     return this;
   }
 
