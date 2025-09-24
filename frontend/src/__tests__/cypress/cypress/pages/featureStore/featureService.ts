@@ -48,8 +48,27 @@ class FeatureServiceTableRow extends TableRow {
     return this;
   }
 
+  findProject() {
+    return this.find().find('[data-label="Project"]');
+  }
+
+  shouldHaveProject(project: string) {
+    this.findProject().should('have.text', project);
+    return this;
+  }
+
   shouldHaveOwner(owner: string) {
     this.find().find('[data-label="Owner"]').should('have.text', owner);
+    return this;
+  }
+
+  shouldHaveCreatedDate(date: string) {
+    this.find().find('[data-label="Created"]').should('contain.text', date);
+    return this;
+  }
+
+  shouldHaveUpdatedDate(date: string) {
+    this.find().find('[data-label="Updated"]').should('contain.text', date);
     return this;
   }
 

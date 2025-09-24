@@ -87,8 +87,13 @@ class FeatureStoreGlobal {
   }
 
   navigate() {
-    appChrome.findNavItem('Feature store').click();
-    this.wait();
+    appChrome.findNavSection('Feature store').click();
+    return this;
+  }
+
+  navigateToOverview() {
+    appChrome.findNavItem('Overview').click();
+    this.waitForOverview();
   }
 
   navigateToFeatureViews() {
@@ -104,6 +109,21 @@ class FeatureStoreGlobal {
   navigateToFeatures() {
     appChrome.findNavItem('Features').click();
     this.waitForFeatures();
+  }
+
+  navigateToDataSources() {
+    appChrome.findNavItem('Data sources').click();
+    this.waitForDataSources();
+  }
+
+  navigateToDatasets() {
+    appChrome.findNavItem('Datasets').click();
+    this.waitForDataSets();
+  }
+
+  navigateToFeatureServices() {
+    appChrome.findNavItem('Feature services').click();
+    this.waitForFeatureServices();
   }
 
   findHeading() {
@@ -237,6 +257,52 @@ class FeatureStoreGlobal {
     const testId = `global-search-item-${type}-${title.toLowerCase().replace(/\s+/g, '-')}`;
     return cy.findByTestId(testId);
   }
+
+  shouldHavePageDescription() {
+    return cy.findByTestId('app-page-description').should('be.visible');
+  }
+
+  shouldHaveEmptyStateDescription() {
+    return cy.findByTestId('empty-state-feature-store').should('be.visible');
+  }
+
+  /**
+   * Extracts the total count from pagination toggle button
+   * @returns Cypress chainable that resolves to the total count number
+   * @example
+   * // For pagination toggle showing "1 - 10 of 31", this returns 31
+   * featureStoreGlobal.getTotalCountFromPagination().then((count) => {
+   *   expect(count).to.equal(31);
+   * });
+   */
+  getTotalCountFromPagination(): Cypress.Chainable<number> {
+    return cy
+      .get('#table-pagination-top-toggle')
+      .then(($el) => {
+        const paginationText = $el.text().trim();
+        const match = paginationText.match(/of\s+(\d+)/);
+        if (match && match[1]) {
+          const count = parseInt(match[1], 10);
+          return cy.wrap(count);
+        }
+        throw new Error(
+          `Could not extract total count from pagination toggle text: ${paginationText}`,
+        );
+      })
+      .then((count) => count);
+  }
+
+  /**
+   * Asserts that the pagination shows the expected total count
+   * @param expectedCount The expected total count
+   * @returns this for chaining
+   */
+  shouldHaveTotalCount(expectedCount: number): this {
+    this.getTotalCountFromPagination().then((actualCount) => {
+      expect(actualCount).to.equal(expectedCount);
+    });
+    return this;
+  }
 }
 
 class FeatureStoreProjectSelector extends Contextual<HTMLElement> {
@@ -258,6 +324,45 @@ class FeatureStoreProjectSelector extends Contextual<HTMLElement> {
     return this;
   }
 }
+
+class FeatureStoreInteractiveHover {
+  shouldHaveInteractiveHoverTooltip(interactiveID: string) {
+    cy.get(`#${interactiveID}-button`).trigger('mouseenter');
+    cy.get(`#${interactiveID}-button`).trigger('focus');
+    // Assert initial tooltip appears with correct text
+    return cy
+      .get('[role="tooltip"]', { timeout: 3000 })
+      .should('be.visible')
+      .should('contain.text', 'Copy to clipboard');
+  }
+
+  shouldHaveInteractiveClickSuccessTooltip(interactiveID: string) {
+    // Ensure document has focus before clipboard operation
+    cy.window().then((win) => {
+      win.focus();
+    });
+
+    // Handle potential clipboard permission issues by catching uncaught exceptions
+    cy.on('uncaught:exception', (err) => {
+      // Return false to prevent the error from failing the test if it's a clipboard error
+      if (err.message.includes('writeText') && err.message.includes('Document is not focused')) {
+        return false;
+      }
+      if (err.name === 'NotAllowedError') {
+        return false;
+      }
+      // Return true for all other errors to let them fail the test as expected
+      return true;
+    });
+
+    cy.get(`#${interactiveID}-button`).click();
+    return cy
+      .get('[role="tooltip"]', { timeout: 5000 })
+      .should('be.visible')
+      .should('contain.text', 'Successfully copied to clipboard!');
+  }
+}
+export const featureStoreInteractiveHover = new FeatureStoreInteractiveHover();
 
 export const featureStoreGlobal = new FeatureStoreGlobal();
 

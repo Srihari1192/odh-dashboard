@@ -57,6 +57,14 @@ class FeatureViewTableRow extends TableRow {
     return this.findFeatureViewName().find('a');
   }
 
+  findProject() {
+    return this.find().find('[data-label="Project"]');
+  }
+
+  findFeatureViewDescription() {
+    return this.find().findByTestId('table-row-title-description');
+  }
+
   findTags() {
     return this.find().find('[data-label="Tags"]');
   }
@@ -79,6 +87,52 @@ class FeatureViewTableRow extends TableRow {
 
   findStoreType() {
     return this.find().find('[data-label="Store type"]');
+  }
+
+  findStoreTypeLabel() {
+    return this.find()
+      .findByTestId('table-row-title') // finds the row
+      .parents('td') // go up to the <td>
+      .find('.pf-v6-c-label__text');
+  }
+
+  findFeatureServicesCount() {
+    return this.find().find('[data-label="Feature Services"]');
+  }
+
+  shouldHaveCreatedDate(date: string) {
+    this.findCreatedDate().should('contain.text', date);
+    return this;
+  }
+
+  shouldHaveFeatureServicesCount(count: number) {
+    this.findFeatureServicesCount().should('contain.text', count.toString());
+    return this;
+  }
+
+  shouldHaveUpdatedDate(date: string) {
+    this.findUpdatedDate().should('contain.text', date);
+    return this;
+  }
+
+  shouldHaveStoreTypeLabel(label: string) {
+    this.findStoreTypeLabel().should('contain.text', label);
+    return this;
+  }
+
+  shouldHaveFeatureViewDescription(description: string) {
+    this.findFeatureViewDescription().should('contain.text', description);
+    return this;
+  }
+
+  shouldHaveProject(project: string) {
+    this.findProject().should('contain.text', project);
+    return this;
+  }
+
+  shouldHaveStoreType(storeType: string) {
+    this.findStoreType().should('contain.text', storeType);
+    return this;
   }
 
   shouldHaveFeatureViewName(name: string) {
@@ -109,3 +163,34 @@ class FeatureViewTableRow extends TableRow {
 export const featureViewsTable = new FeatureViewsTable(() =>
   cy.findByTestId('feature-views-table'),
 );
+
+class FeatureViewsPage extends Contextual<HTMLElement> {
+  findBreadcrumbLink() {
+    return cy.findByTestId('feature-view-details-breadcrumb-link');
+  }
+
+  findBreadcrumbItem() {
+    return cy.findByTestId('breadcrumb-version-name');
+  }
+
+  findPageTitle() {
+    return cy.findByTestId('app-page-title');
+  }
+
+  shouldHaveBreadcrumbLink(link: string) {
+    this.findBreadcrumbLink().should('contain.text', link);
+    return this;
+  }
+
+  shouldHaveBreadcrumbItem(item: string) {
+    this.findBreadcrumbItem().should('contain.text', item);
+    return this;
+  }
+
+  shouldHaveFeatureViewsPageTitle(title: string) {
+    this.findPageTitle().should('contain.text', title);
+    return this;
+  }
+}
+
+export const featureViewsPage = new FeatureViewsPage(() => cy.findByTestId('feature-views-page'));
