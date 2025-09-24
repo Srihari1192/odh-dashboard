@@ -1,5 +1,9 @@
 import { appChrome } from '#~/__tests__/cypress/cypress/pages/appChrome';
 import { Contextual } from '#~/__tests__/cypress/cypress/pages/components/Contextual';
+import {
+  getTotalCountFromPagination,
+  shouldHaveInteractiveClickSuccessTooltip as handleInteractiveClickSuccess,
+} from '#~/__tests__/cypress/cypress/utils/featureStoreUtils';
 
 class FeatureStoreGlobal {
   visit(project?: string) {
@@ -88,6 +92,27 @@ class FeatureStoreGlobal {
     this.waitForFeatureServiceDetails(featureService);
   }
 
+  navigate(){
+    appChrome
+      .findNavItem({
+        name: 'Feature store',
+        rootSection: 'Develop & train',
+      })
+      .click();
+    this.wait();
+  }
+
+  navigateToOverview() {
+    appChrome
+      .findNavItem({
+        name: 'Overview',
+        rootSection: 'Develop & train',
+        subSection: 'Feature store',
+      })
+      .click();
+    this.waitForOverview();
+  }
+
   navigateToFeatureViews() {
     appChrome
       .findNavItem({
@@ -119,6 +144,39 @@ class FeatureStoreGlobal {
       })
       .click();
     this.waitForFeatures();
+  }
+
+  navigateToDataSources() {
+    appChrome
+      .findNavItem({
+        name: 'Data sources',
+        rootSection: 'Develop & train',
+        subSection: 'Feature store',
+      })
+      .click();
+    this.waitForDataSources();
+  }
+
+  navigateToDatasets() {
+    appChrome
+      .findNavItem({
+        name: 'Datasets',
+        rootSection: 'Develop & train',
+        subSection: 'Feature store',
+      })
+      .click();
+    this.waitForDataSets();
+  }
+
+  navigateToFeatureServices() {
+    appChrome
+      .findNavItem({
+        name: 'Feature services',
+        rootSection: 'Develop & train',
+        subSection: 'Feature store',
+      })
+      .click();
+    this.waitForFeatureServices();
   }
 
   findHeading() {
@@ -256,6 +314,26 @@ class FeatureStoreGlobal {
   shouldHavePageDescription() {
     return cy.findByTestId('app-page-description').should('be.visible');
   }
+
+  findColumn(columnName: string) {
+    return cy.find(`[data-label="${columnName }"]`);
+  }
+
+  findPaginationToggle() {
+    return cy.get('#table-pagination-top-toggle');
+  }
+
+  findInteractiveCopyButton(interactiveID: string) {
+    return cy.get(`#${interactiveID}-button`);
+  }
+
+  // Asserts that the pagination shows the expected total count
+  shouldHaveTotalCount(expectedCount: number): this {
+    getTotalCountFromPagination().then((actualCount) => {
+      expect(actualCount).to.equal(expectedCount);
+    });
+    return this;
+  }
 }
 
 class FeatureStoreProjectSelector extends Contextual<HTMLElement> {
@@ -277,6 +355,23 @@ class FeatureStoreProjectSelector extends Contextual<HTMLElement> {
     return this;
   }
 }
+
+class FeatureStoreInteractiveHover {
+  shouldHaveInteractiveHoverTooltip(interactiveID: string) {
+    cy.get(`#${interactiveID}-button`).trigger('mouseenter');
+    cy.get(`#${interactiveID}-button`).trigger('focus');
+    // Assert initial tooltip appears with correct text
+    return cy
+      .get('[role="tooltip"]', { timeout: 3000 })
+      .should('be.visible')
+      .should('contain.text', 'Copy to clipboard');
+  }
+
+  shouldHaveInteractiveClickSuccessTooltip(interactiveID: string) {
+    return handleInteractiveClickSuccess(interactiveID);
+  }
+}
+export const featureStoreInteractiveHover = new FeatureStoreInteractiveHover();
 
 export const featureStoreGlobal = new FeatureStoreGlobal();
 
