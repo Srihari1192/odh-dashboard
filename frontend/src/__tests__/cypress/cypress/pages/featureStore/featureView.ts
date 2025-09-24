@@ -29,6 +29,14 @@ class FeatureViewsTable extends Contextual<HTMLElement> {
     return this;
   }
 
+  findColumnByDataLabel(columnName: string) {
+    return cy.get(`[data-label="${columnName}"]`);
+  }
+
+  getFirstRow() {
+    return this.findRows().first();
+  }
+
   findToolbar() {
     return new FeatureViewToolbar(() => cy.findByTestId('feature-store-table-toolbar'));
   }
@@ -57,6 +65,14 @@ class FeatureViewTableRow extends TableRow {
     return this.findFeatureViewName().find('a');
   }
 
+  findProject() {
+    return this.find().find('[data-label="Project"]');
+  }
+
+  findFeatureViewDescription() {
+    return this.find().findByTestId('table-row-title-description');
+  }
+
   findTags() {
     return this.find().find('[data-label="Tags"]');
   }
@@ -79,6 +95,10 @@ class FeatureViewTableRow extends TableRow {
 
   findStoreType() {
     return this.find().find('[data-label="Store type"]');
+  }
+
+  findFeatureServicesCount() {
+    return this.find().find('[data-label="Feature services"]');
   }
 
   shouldHaveFeatureViewName(name: string) {
@@ -109,3 +129,19 @@ class FeatureViewTableRow extends TableRow {
 export const featureViewsTable = new FeatureViewsTable(() =>
   cy.findByTestId('feature-views-table'),
 );
+
+class FeatureViewsPage extends Contextual<HTMLElement> {
+  findBreadcrumbLink() {
+    return cy.findByTestId('feature-view-details-breadcrumb-link');
+  }
+
+  findBreadcrumbItem() {
+    return cy.findByTestId('breadcrumb-version-name');
+  }
+
+  findPageTitle() {
+    return cy.findByTestId('app-page-title');
+  }
+}
+
+export const featureViewsPage = new FeatureViewsPage(() => cy.findByTestId('feature-views-page'));

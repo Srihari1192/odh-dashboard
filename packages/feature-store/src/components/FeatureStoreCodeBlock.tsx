@@ -40,6 +40,7 @@ const FeatureStoreCodeBlock: React.FC<FeatureStoreCodeBlockProps> = ({
       actions={
         <CodeBlockAction>
           <ClipboardCopyButton
+            data-testid="copy-to-clipboard-button"
             id={`${id}-button`}
             textId={id}
             aria-label="Copy to clipboard"
@@ -54,7 +55,9 @@ const FeatureStoreCodeBlock: React.FC<FeatureStoreCodeBlockProps> = ({
         </CodeBlockAction>
       }
     >
-      <CodeBlockCode id={id}>{content}</CodeBlockCode>
+      <CodeBlockCode id={id} data-testid="code-block">
+        {content}
+      </CodeBlockCode>
     </CodeBlock>
   );
 };

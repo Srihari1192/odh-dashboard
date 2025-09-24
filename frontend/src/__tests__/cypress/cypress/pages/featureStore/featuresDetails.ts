@@ -49,6 +49,14 @@ class FeatureDetails extends Contextual<HTMLElement> {
     return cy.findByTestId('feature-details-breadcrumb-item');
   }
 
+  findInteractiveCodeContent() {
+    return cy.findByTestId('code-block');
+  }
+
+  findFeatureTagsGroup() {
+    return cy.findByTestId('feature-store-tags-group');
+  }
+
   shouldHaveApplicationsPageDescription(description: string) {
     this.findApplicationsPageDescription().should('contain.text', description);
     return this;
@@ -66,11 +74,6 @@ class FeatureDetails extends Contextual<HTMLElement> {
 
   shouldHaveFeatureTypeLabel(label: string) {
     this.findFeatureTypeLabel().should('contain.text', label);
-    return this;
-  }
-
-  shouldHaveFeatureTags() {
-    this.findFeatureTags().should('be.visible');
     return this;
   }
 

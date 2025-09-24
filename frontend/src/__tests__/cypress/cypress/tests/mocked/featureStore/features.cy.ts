@@ -168,6 +168,7 @@ describe('Features for a single project', () => {
     featureStoreGlobal.visitFeatures(fsProjectName);
 
     featureStoreGlobal.findHeading().should('have.text', 'Features');
+    featureStoreGlobal.findPageDescription().should('be.visible');
 
     featureStoreGlobal.findProjectSelector().should('exist');
     featureStoreGlobal.findProjectSelector().click();

@@ -29,6 +29,14 @@ class FeaturesTable extends Contextual<HTMLElement> {
     return this;
   }
 
+  findColumnByDataLabel(columnName: string) {
+    return cy.get(`[data-label="${columnName}"]`);
+  }
+
+  getFirstRow() {
+    return this.findRows().first();
+  }
+
   findToolbar() {
     return new FeatureToolbar(() => cy.findByTestId('feature-store-table-toolbar'));
   }

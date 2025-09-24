@@ -5,6 +5,7 @@ import { mockFeatureStoreProject } from '@odh-dashboard/feature-store/mocks/mock
 import { mockFeatureService } from '@odh-dashboard/feature-store/mocks/mockFeatureServices';
 import { mockFeatureStore } from '@odh-dashboard/feature-store/mocks/mockFeatureStore';
 import { mockFeatureView } from '@odh-dashboard/feature-store/mocks/mockFeatureViews';
+import { featureStoreGlobal } from '#~/__tests__/cypress/cypress/pages/featureStore/featureStoreGlobal';
 import {
   featureServiceDetails,
   featureServiceDetailsBreadcrumb,
@@ -191,6 +192,7 @@ describe('Feature Service Details', () => {
     it('should display feature service details page with correct title and breadcrumb', () => {
       featureServiceDetails.visit(fsProjectName, featureServiceName);
       featureServiceDetails.shouldHaveTitle(featureServiceName);
+      featureStoreGlobal.findPageDescription().should('be.visible');
 
       featureServiceDetailsBreadcrumb.findBreadcrumbLink().should('be.visible');
       featureServiceDetailsBreadcrumb.shouldShowCurrentService(featureServiceName);
