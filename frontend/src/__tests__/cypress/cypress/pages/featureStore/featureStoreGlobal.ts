@@ -252,6 +252,10 @@ class FeatureStoreGlobal {
     const testId = `global-search-item-${type}-${title.toLowerCase().replace(/\s+/g, '-')}`;
     return cy.findByTestId(testId);
   }
+
+  shouldHavePageDescription() {
+    return cy.findByTestId('app-page-description').should('be.visible');
+  }
 }
 
 class FeatureStoreProjectSelector extends Contextual<HTMLElement> {
