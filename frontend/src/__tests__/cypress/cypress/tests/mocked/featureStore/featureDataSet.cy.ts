@@ -259,6 +259,7 @@ describe('Feature DataSets for all projects', () => {
 
   it('should display all data sets when no project is selected', () => {
     featureStoreGlobal.visitDataSets();
+    featureStoreGlobal.shouldHavePageDescription();
 
     featureDataSetsTable.findTable().should('be.visible');
     featureDataSetsTable.shouldHaveDataSetCount(3);

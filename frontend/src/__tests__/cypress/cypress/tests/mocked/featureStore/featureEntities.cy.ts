@@ -265,6 +265,7 @@ describe('Feature Entities for all projects', () => {
   it('should navigate to feature view when clicking feature views popover in all projects view', () => {
     featureStoreGlobal.visitEntities();
 
+    featureStoreGlobal.shouldHavePageDescription();
     featureEntitiesTable.findTable().should('be.visible');
     featureEntitiesTable.findRow('user_id').findFeatureViews().find('button').click();
 

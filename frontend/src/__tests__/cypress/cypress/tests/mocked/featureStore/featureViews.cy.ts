@@ -135,6 +135,7 @@ describe('Feature Views', () => {
     featureStoreGlobal.visitFeatureViews(fsProjectName);
 
     featureStoreGlobal.findHeading().should('have.text', 'Feature views');
+    featureStoreGlobal.shouldHavePageDescription();
 
     featureStoreGlobal.findProjectSelector().should('exist');
     featureStoreGlobal.findProjectSelector().click();

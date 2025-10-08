@@ -279,6 +279,7 @@ describe('Feature Data Sources for all projects', () => {
 
   it('should navigate to feature view when clicking feature views popover in all projects view', () => {
     featureStoreGlobal.visitDataSources();
+    featureStoreGlobal.shouldHavePageDescription();
 
     featureDataSourcesTable.findTable().should('be.visible');
     const row = featureDataSourcesTable.findRow('loan_data');
